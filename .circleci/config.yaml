@@ -10,16 +10,23 @@ jobs:
       - run: |
           echo $API_KEY
 
-  # Test job with pipeline execution within
   test:
     docker:
-      - image: cimg/base:2023.03
+      - image: cimg/python:3.9  # Use a Python image to ensure pytest is available
     steps:
       - checkout
-      - run: |
-          # Execute the desired pipeline within the test job
-          python /tests/reachability_test.py
-          
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+
 # Workflow to orchestrate job execution
 workflows:
   build_and_test:
