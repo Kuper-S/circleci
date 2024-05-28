@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run: |
           # Execute the desired pipeline within the test job
-          ./your_script.sh /weather-app /tests/reachability_test.py
+          python /weather-app /tests/reachability_test.py
           # Replace 'your_script.sh' with the actual script that runs the pipeline
 
 # Workflow to orchestrate job execution
