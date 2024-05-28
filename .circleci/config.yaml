@@ -8,8 +8,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          echo "this is the build job"
-          ls
+          cat $API_KEY
   test:
     docker:
       - image: cimg/base:2023.03
