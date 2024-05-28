@@ -9,6 +9,11 @@ jobs:
       - checkout
       - run: |
           echo $API_KEY
+    steps:
+      - Build Docker Image
+      - run: |
+          cd /home/circleci/project/weather-app/app
+          docker build -t kupidun/weather-circleci:latest .
 
   test:
     docker:
