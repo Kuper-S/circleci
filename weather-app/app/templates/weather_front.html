@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS Export link: https://drive.google.com/uc?export=view&id=10z2NOzEgVCYoelLptGhWimH8SPhGF04_ -->
+    <link rel="stylesheet" href="../static/weather_front.css"/>
+    <title>Weather App</title>
+    <link rel="icon" type="x-icon" href="https://lh3.googleusercontent.com/drive-viewer/AEYmBYTCo-2msA052NtJlckp_fXsuH1RBSC_NzvGT30xriOwakgExuuW7-9gCWzHl8b-e5Y9q5wgXwpr2gNohEUFiV55nnIE4g=s2560"/>
+</head>
+<body>
+<img class="slideimg" src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYR2muarYprP4Sx-cPq1yyqvxG9s4RG5Frqty-TG-J-ktvqtySzvdFbYrw3DwmDvrov7GNjoBEInF4cipSJtcnFFNpm6LQ=s2560">
+<img class="slideimg" src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYRxfKJ8fwJBLQ-jechOGmO5-n9rpyBm4owEjs63u7dlHTE5syF9bwltY4bEHraxyHvSlYTiFBVEqyQjpyDSKTBtLDfF7A=s2560">
+<img class="slideimg" src="https://lh3.googleusercontent.com/drive-viewer/AEYmBYTrbyTY4thfN9zqy4PpXXjkPROh-SSjUvBp5s841cipZU1z35AM53JRFhhkKRh-M6C2wUmzE9cmh4d0FRE0ckQSfk6n2Q=s2560">
+<div class = "container">
+    <form class="form-container" method="POST" action="{{ url_for('load_home') }}">
+        <h1>Get Weather</h1>
+        <input type="text" placeholder="Enter Location" name="location" required>
+        <input type="submit" value="Submit">
+
+    </form>
+    {% if data %}
+        <h1>Location: {{data['location']}}</h1>
+        <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Day Temperature</th>
+                    <th>Night Temperature</th>
+                    <th>Humidity</th>
+                </tr>
+                    {% for i in range(7) %}
+                        <tr>
+                            <td>{{data['date'][i]}}</td>
+                            <td>{{data['day_temp'][i]}}°C</td>
+                            <td>{{data['night_temp'][i]}}°C</td>
+                            <td>{{'%0.2f' % data['humidity'][i]}}%</td>
+                        </tr>
+                    {% endfor %}
+
+            </table>
+    {% elif error %}
+        <h1 class="error">Error: {{ error }}</h1>
+    {% endif %}
+</div>
+</body>
+</html>
+

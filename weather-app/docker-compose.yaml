@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    restart: always
+    build: ./app
+    command: gunicorn -w 4 -b 0.0.0.0:9090 wsgi:app
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app

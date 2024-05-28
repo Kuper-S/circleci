@@ -1,0 +1,125 @@
+/*//////////////////////////////////////////////////////////////////
+[ general ]*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.title {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+}
+/*//////////////////////////////////////////////////////////////////
+[ background imgs ]*/
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+
+    33% {
+        opacity: 0;
+    }
+
+    67% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.slideimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: fade 9s ease-in-out infinite alternate;
+}
+
+img:nth-last-of-type(2) {
+    animation-delay: 6s;
+}
+
+img:nth-of-type(3) {
+    animation-delay: 3s;
+}
+
+img:nth-of-type(4) {
+    animation-delay: 0s;
+}
+
+.container {
+    height:  100vh;
+    width: 100vw;
+    position: relative;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.25);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+/* Add styles to the form container */
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+  }
+
+  /* Full-width input fields */
+  .form-container input[type=text] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#weather {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+.error_image {
+    position: relative;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
