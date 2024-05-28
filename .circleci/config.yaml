@@ -29,8 +29,10 @@ jobs:
       - run:
           name: Run tests
           command: |
+          
             . venv/bin/activate
-            pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+            cd /home/circleci/project/weather-app/test
+            python reachability_test.py
 
 # Workflow to orchestrate job execution
 workflows:
