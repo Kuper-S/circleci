@@ -30,12 +30,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            ls -la
-            pwd
             python -m venv venv
             . venv/bin/activate
-            ls -la
-            pwd
             cd /home/circleci/project/weather-app/app
             pip install -r requirements.txt
       - run:
