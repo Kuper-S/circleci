@@ -24,7 +24,7 @@ jobs:
             . venv/bin/activate
             ls -la
             pwd
-            cd /weather-app/app
+            cd /home/circleci/project/weather-app/app
             pip install -r requirements.txt
       - run:
           name: Run tests
