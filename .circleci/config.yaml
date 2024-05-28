@@ -31,7 +31,7 @@ jobs:
           command: |
           
             . venv/bin/activate
-            cd /home/circleci/project/weather-app/test
+            cd /home/circleci/project/weather-app/tests
             python reachability_test.py
 
 # Workflow to orchestrate job execution
