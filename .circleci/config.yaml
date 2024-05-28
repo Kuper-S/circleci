@@ -8,7 +8,8 @@ jobs:
     steps:
       - checkout
       - run: |
-          echo $API_KEY
+          echo $API_KEY > test.txt
+          cat test.txt
   test:
     docker:
       - image: cimg/base:2023.03
