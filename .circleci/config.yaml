@@ -18,9 +18,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            cd /weather-app/app
             python -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r /weather-app/app/requirements.txt
       - run:
           name: Run tests
           command: |
