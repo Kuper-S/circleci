@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          cat $API_KEY
+          echo $API_KEY
   test:
     docker:
       - image: cimg/base:2023.03
