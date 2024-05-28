@@ -18,6 +18,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            ls -la
             cd /weather-app/app
             python -m venv venv
             . venv/bin/activate
