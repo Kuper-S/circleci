@@ -9,6 +9,7 @@ jobs:
       - checkout
       - run: |
           echo $API_KEY
+          pip install pytest
   test:
     docker:
       - image: cimg/base:2023.03
