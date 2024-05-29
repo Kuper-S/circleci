@@ -1,6 +1,5 @@
 version: 2.1
 
-# Define jobs
 jobs:
   build:
     docker:
@@ -13,14 +12,14 @@ jobs:
           name: Build Docker Image With Version Scheme
           command: |
             cd /home/circleci/project/weather-app/app
-            docker build -t kupidun/weather-circleci:latest .
-            docker tag kupidun/weather-circleci:latest kupidun/weather-circleci:1.0.$CIRCLE_SHA1
+            docker build -t registry.gitlab.com/team1414207/docker-image:latest .
+            docker tag registry.gitlab.com/team1414207/docker-image:latest registry.gitlab.com/team1414207/docker-image:1.0.$CIRCLE_SHA1
       - run:
           name: Push Docker Image
           command: |
-            echo $DOCKER_HUB_TOKEN | docker login -u kupidun --password-stdin
-            docker push kupidun/weather-circleci:latest
-            docker push kupidun/weather-circleci:1.0.$CIRCLE_SHA1
+            echo $GITLAB_REGISTRY | docker login registry.gitlab.com -u your-gitlab-username --password-stdin
+            docker push registry.gitlab.com/team1414207/docker-image:latest
+            docker push registry.gitlab.com/team1414207/docker-image:1.0.$CIRCLE_SHA1
 
   test:
     docker:
