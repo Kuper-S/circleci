@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  discord: antonioned/discord@0.1.0
 jobs:
   build:
     docker:
@@ -20,7 +21,7 @@ jobs:
             echo $GITLAB_REGISTRY | docker login registry.gitlab.com -u your-gitlab-username --password-stdin
             docker push registry.gitlab.com/team1414207/docker-image:latest
             docker push registry.gitlab.com/team1414207/docker-image:1.0.$CIRCLE_SHA1
-
+       
   test:
     docker:
       - image: cimg/python:3.9  
@@ -39,7 +40,11 @@ jobs:
             . venv/bin/activate
             cd /home/circleci/project/weather-app/tests
             python reachability_test.py
-
+      - discord/status:
+          fail_only: false
+          failure_message: "**${CIRCLE_USERNAME}**'s build: **${CIRCLE_JOB}** failed."
+          success_message: "**${CIRCLE_USERNAME}** deployed api to prod."
+          webhook: "${DISCORD_STATUS_WEBHOOK}"
 # Workflow to orchestrate job execution
 workflows:
   build_and_test:
