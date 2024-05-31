@@ -4,7 +4,7 @@
 This project demonstrates a CI/CD pipeline using CircleCI to build, test, and deploy a Dockerized Weather App to an EKS cluster. The pipeline includes Terraform for infrastructure management, Terratest for infrastructure testing, and Checkov for security compliance checks. The application is deployed to the EKS cluster using ArgoCD.
 
 ## Prerequisites
-- Docker
+- Docker , Docker-Compose
 - GitLab account
 - CircleCI account
 - AWS account with IAM permissions to create EKS and related resources
