@@ -2,7 +2,8 @@ version: 2.1
 orbs:
   discord: antonioned/discord@0.1.0
   aws-eks: circleci/aws-eks@1.0.0
-  
+  kubernetes: circleci/kubernetes@0.11.1
+
 jobs:
   build:
     docker:
@@ -23,10 +24,10 @@ jobs:
             echo $GITLAB_REGISTRY | docker login registry.gitlab.com -u your-gitlab-username --password-stdin
             docker push registry.gitlab.com/team1414207/docker-image:latest
             docker push registry.gitlab.com/team1414207/docker-image:1.0.$CIRCLE_SHA1
-       
+
   test:
     docker:
-      - image: cimg/python:3.9  
+      - image: cimg/python:3.9
     steps:
       - checkout
       - run:
@@ -47,11 +48,11 @@ jobs:
           failure_message: "**${CIRCLE_USERNAME}**'s build: **${CIRCLE_JOB}** failed."
           success_message: "**${CIRCLE_USERNAME}** deployed api to prod."
           webhook: "${DISCORD_STATUS_WEBHOOK}"
-# Workflow to orchestrate job execution
+
 workflows:
   build_and_test:
     jobs:
       - build
       - test:
           requires:
-            - build  # Ensure 'test' job runs after 'build' finishes
+            - build
