@@ -1,9 +1,10 @@
 version: 2.1
+
 orbs:
   discord: antonioned/discord@0.1.0
   aws-eks: circleci/aws-eks@1.0.0
   kubernetes: circleci/kubernetes@0.11.1
-  #bridgecrew: bridgecrew/bridgecrew@1.0.5
+  bridgecrew: bridgecrew/bridgecrew@1.0.5
 
 jobs:
   build:
@@ -50,6 +51,70 @@ jobs:
           success_message: "**${CIRCLE_USERNAME}** deployed api to prod."
           webhook: "${DISCORD_STATUS_WEBHOOK}"
 
+  checkov_tests:
+    docker:
+      - image: bridgecrew/bridgecrew:latest
+    steps:
+      - checkout
+      - run:
+          name: Checkov scan
+          command: |
+            bridgecrew --directory ./terraform --bc-api-key $BC_API_KEY --soft-fail
+
+  terratest:
+    docker:
+      - image: cimg/go:1.17
+    steps:
+      - checkout
+      - run:
+          name: Install Terraform
+          command: |
+            sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+            wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+            gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+            echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+            sudo apt update && sudo apt-get install terraform
+      - run:
+          name: Install Go
+          command: sudo apt-get install -y golang-go
+      - run:
+          name: Install Terratest dependencies
+          command: |
+            cd terraform/test
+            go mod init terratest
+            go mod tidy
+      - run:
+          name: Run Terratest
+          command: |
+            cd terraform/test
+            go test -v -timeout 30m
+      - discord/status:
+          fail_only: false
+          failure_message: "**${CIRCLE_USERNAME}**'s Terratest job: **${CIRCLE_JOB}** failed."
+          success_message: "**${CIRCLE_USERNAME}**'s Terratest job: **${CIRCLE_JOB}** succeeded."
+          webhook: "${DISCORD_STATUS_WEBHOOK}"
+
+  deploy:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+      - run:
+          name: Initialize Terraform
+          command: |
+            cd terraform
+            terraform init
+      - run:
+          name: Apply Terraform Configuration
+          command: |
+            cd terraform
+            terraform apply -auto-approve
+      - discord/status:
+          fail_only: false
+          failure_message: "**${CIRCLE_USERNAME}**'s Deploy job: **${CIRCLE_JOB}** failed."
+          success_message: "**${CIRCLE_USERNAME}**'s Deploy job: **${CIRCLE_JOB}** succeeded."
+          webhook: "${DISCORD_STATUS_WEBHOOK}"
+
 workflows:
   build_and_test:
     jobs:
@@ -57,3 +122,12 @@ workflows:
       - test:
           requires:
             - build
+      - checkov_tests:
+          requires:
+            - build
+      - terratest:
+          requires:
+            - checkov_tests
+      - deploy:
+          requires:
+            - terratest
