@@ -210,8 +210,8 @@ workflows:
 **Successful builds will deploy the application to the EKS cluster.**
 
 ### Manual Testing
-```sh
 To manually test the infrastructure:
+```sh
 cd terraform
 terraform apply
 cd ../test
