@@ -3,7 +3,7 @@ orbs:
   discord: antonioned/discord@0.1.0
   aws-eks: circleci/aws-eks@1.0.0
   kubernetes: circleci/kubernetes@0.11.1
-  bridgecrew: bridgecrew/bridgecrew@1.0.5
+  #bridgecrew: bridgecrew/bridgecrew@1.0.5
 
 jobs:
   build:
