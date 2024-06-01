@@ -1,30 +1,38 @@
 package test
 
 import (
-  "testing"
-  "github.com/gruntwork-io/terratest/modules/terraform"
-  "github.com/gruntwork-io/terratest/modules/k8s"
-  "github.com/stretchr/testify/assert"
+	"testing"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestEKSCluster(t *testing.T) {
-  t.Parallel()
+func TestTerraformExample(t *testing.T) {
+	t.Parallel()
 
-  terraformOptions := &terraform.Options{
-    TerraformDir: "../path/to/your/terraform/code",
+	// Define the Terraform options
+	terraformOptions := &terraform.Options{
+		// The path to where your Terraform code is located
+		TerraformDir: "../terraform",
 
-    Vars: map[string]interface{}{
-      "variable_name": "value",
-    },
-  }
-  
-  defer terraform.Destroy(t, terraformOptions)
-  terraform.InitAndApply(t, terraformOptions)
+		// Variables to pass to our Terraform code using -var options
+		Vars: map[string]interface{}{
+			"AWS_ACCESS_KEY_ID":     "<your-access-key-id>",
+			"AWS_SECRET_ACCESS_KEY": "<your-secret-access-key>",
+		},
 
-  kubeconfig := terraform.Output(t, terraformOptions, "kubeconfig")
-  options := k8s.NewKubectlOptions("", kubeconfig, "default")
+		// Disable colors in Terraform commands so its easier to parse stdout/stderr
+		NoColor: true,
+	}
 
-  // Verify the EKS cluster is running 
-  nodes := k8s.GetNodes(t, options)
-  assert.NotEmpty(t, nodes)
+	// Clean up resources with "terraform destroy" at the end of the test
+	defer terraform.Destroy(t, terraformOptions)
+
+	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
+	terraform.InitAndApply(t, terraformOptions)
+
+	// Run "terraform output" to get the values of output variables
+	vpcId := terraform.Output(t, terraformOptions, "vpc_id")
+
+	// Verify we're getting back the outputs we expect
+	assert.NotEmpty(t, vpcId)
 }
